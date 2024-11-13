@@ -2,8 +2,12 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build-linux-gcc:
+  build-linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+        penger: [false, true]
     steps:
       - uses: actions/checkout@v1
       - name: install dependencies
@@ -12,31 +16,29 @@ jobs:
           sudo apt-get install -qq libsdl2-dev
       - name: build sowon
         run: |
-          make
+          if [ ${{ matrix.penger }} = true ]; then
+            make CFLAGS="-DPENGER"
+          else
+            make
+          fi
         env:
-          CC: gcc
-  build-linux-clang:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -qq libsdl2-dev
-      - name: build sowon
-        run: |
-          make
-        env:
-          CC: clang
+          CC: ${{ matrix.compiler }}
   build-macos:
     runs-on: macOS-latest
+    strategy:
+      matrix:
+        penger: [false, true]
     steps:
       - uses: actions/checkout@v1
       - name: install dependencies
         run: brew install sdl2 pkg-config
       - name: build sowon
         run: |
-          make
+          if [ ${{ matrix.penger }} = true ]; then
+            make CFLAGS="-DPENGER"
+          else
+            make
+          fi
         env:
           CC: clang
   build-windows-msvc:
