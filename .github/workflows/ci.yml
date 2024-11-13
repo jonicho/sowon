@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         compiler: [gcc, clang]
-        penger: [false, true]
+        penger: ["", "PENGER=1"]
     steps:
       - uses: actions/checkout@v1
       - name: install dependencies
@@ -16,36 +16,28 @@ jobs:
           sudo apt-get install -qq libsdl2-dev
       - name: build sowon
         run: |
-          if [ ${{ matrix.penger }} = true ]; then
-            make PENGER=1
-          else
-            make
-          fi
+          make ${{ matrix.penger }}
         env:
           CC: ${{ matrix.compiler }}
   build-macos:
     runs-on: macOS-latest
     strategy:
       matrix:
-        penger: [false, true]
+        penger: ["", "PENGER=1"]
     steps:
       - uses: actions/checkout@v1
       - name: install dependencies
         run: brew install sdl2 pkg-config
       - name: build sowon
         run: |
-          if [ ${{ matrix.penger }} = true ]; then
-            make PENGER=1
-          else
-            make
-          fi
+          make ${{ matrix.penger }}
         env:
           CC: clang
   build-windows-msvc:
     runs-on: windows-latest
     strategy:
       matrix:
-        penger: [false, true]
+        penger: ["", "PENGER"]
     steps:
       - uses: actions/checkout@v1
         # this runs vcvarsall for us, so we get the MSVC toolchain in PATH.
@@ -58,11 +50,7 @@ jobs:
       - name: build sowon
         shell: cmd
         run: |
-          if ${{ matrix.penger }} == true (
-            build_msvc.bat PENGER
-          ) else (
-            build_msvc.bat
-          )
+          build_msvc.bat ${{ matrix.penger }}
 # TODO: FreeBSD build is broken
 #  build-freebsd:
 #    runs-on: macos-latest
