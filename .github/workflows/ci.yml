@@ -9,7 +9,7 @@ jobs:
         compiler: [gcc, clang]
         penger: ["", "PENGER=1"]
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: install dependencies
         run: |
           sudo apt-get update
@@ -25,7 +25,7 @@ jobs:
       matrix:
         penger: ["", "PENGER=1"]
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: install dependencies
         run: brew install sdl2 pkg-config
       - name: build sowon
@@ -39,7 +39,7 @@ jobs:
       matrix:
         penger: ["", "PENGER"]
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
         # this runs vcvarsall for us, so we get the MSVC toolchain in PATH.
       - uses: seanmiddleditch/gha-setup-vsdevenv@master
       - name: download sdl2
@@ -59,7 +59,7 @@ jobs:
       matrix:
         penger: ["", "PENGER=1"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Build on FreeBSD
         id: build
         uses: vmactions/freebsd-vm@v1
