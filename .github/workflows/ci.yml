@@ -51,18 +51,21 @@ jobs:
         shell: cmd
         run: |
           build_msvc.bat ${{ matrix.penger }}
-# TODO: FreeBSD build is broken
-#  build-freebsd:
-#    runs-on: macos-latest
-#    name: FreeBSD LLVM Clang build
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Build on FreeBSD
-#        id: build
-#        uses: vmactions/freebsd-vm@v0.0.9
-#        with:
-#          usesh: true
-#          prepare: pkg install -y sdl2 pkgconf
-#          run: |
-#            freebsd-version
-#            make
+
+  build-freebsd:
+    runs-on: ubuntu-latest
+    name: FreeBSD LLVM Clang build
+    strategy:
+      matrix:
+        penger: ["", "PENGER=1"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build on FreeBSD
+        id: build
+        uses: vmactions/freebsd-vm@v1
+        with:
+          usesh: true
+          prepare: pkg install -y sdl2 pkgconf
+          run: |
+            freebsd-version
+            make ${{ matrix.penger }}
