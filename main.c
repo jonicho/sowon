@@ -5,7 +5,11 @@
 #include <string.h>
 #include <time.h>
 
+#ifdef _WIN32
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
 #include "./digits.h"
 
@@ -118,7 +122,7 @@ void render_penger_at(SDL_Renderer *renderer, SDL_Texture *penger, float time, i
     
     int step = (int)(time*sps)%(60*sps); //step index [0,60*sps-1]
 
-    float progress  = step/(60.0*sps); // [0,1]
+    float progress  = step/(60.0f*sps); // [0,1]
     
     int frame_index = step%2;
 
@@ -134,8 +138,8 @@ void render_penger_at(SDL_Renderer *renderer, SDL_Texture *penger, float time, i
     };
 
     SDL_Rect dst_rect = {
-        floorf((float)penger_walk_width * progress - penger_drawn_width),
-        window_height - (penger_height / PENGER_SCALE),
+        (int) (penger_walk_width * progress - penger_drawn_width),
+        (int) (window_height - (penger_height / PENGER_SCALE)),
         (int) (penger_width / 2) / PENGER_SCALE,
         (int) penger_height / PENGER_SCALE
     };

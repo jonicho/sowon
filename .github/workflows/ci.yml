@@ -42,7 +42,10 @@ jobs:
         env:
           CC: clang
   build-windows-msvc:
-    runs-on: windows-2019
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        penger: [false, true]
     steps:
       - uses: actions/checkout@v1
         # this runs vcvarsall for us, so we get the MSVC toolchain in PATH.
@@ -55,7 +58,11 @@ jobs:
       - name: build sowon
         shell: cmd
         run: |
-          ./build_msvc.bat
+          if ${{ matrix.penger }} == true (
+            build_msvc.bat PENGER
+          ) else (
+            build_msvc.bat
+          )
 # TODO: FreeBSD build is broken
 #  build-freebsd:
 #    runs-on: macos-latest
