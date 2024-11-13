@@ -1,5 +1,5 @@
 COMMON_CFLAGS=		-Wall -Wextra -std=c99 -pedantic
-CFLAGS=		`pkg-config --cflags sdl2` $(if $(PENGER),-DPENGER) $(COMMON_CFLAGS)
+CFLAGS+=		`pkg-config --cflags sdl2` $(if $(PENGER),-DPENGER) $(COMMON_CFLAGS)
 COMMON_LIBS=		-lm
 LIBS=			`pkg-config --libs sdl2` $(COMMON_LIBS)
 PREFIX?=		/usr/local
